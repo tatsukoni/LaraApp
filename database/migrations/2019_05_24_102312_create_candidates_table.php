@@ -18,7 +18,6 @@ class CreateCandidatesTable extends Migration
             $table->string('candidateName');
             $table->uuid('scheduleId');
             $table->timestamps();
-            $table->foreign('scheduleId')->references('scheduleId')->on('schedules')->onDelete('cascade');
         });
     }
 

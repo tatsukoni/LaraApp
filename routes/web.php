@@ -24,3 +24,6 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('create', 'ScheduleController@create');
 
 Route::post('posts', 'ScheduleController@store');
+
+//予定の詳細表示
+Route::get('/schedules/{id}', 'ScheduleController@show');

@@ -24,23 +24,38 @@ class ScheduleController extends Controller
     //予定保存
     public function store(Request $request) {
         $schedule = new Schedule();
-        $candidate = new Candidate();
         $id = Auth::id();
-        $schedule->scheduleId = Uuid::generate()->string;
+        $scheduleId = Uuid::generate()->string;
+        $array = explode("\r\n", $request->candidates);
+        $schedule->scheduleId = $scheduleId;
         $schedule->scheduleName = $request->scheduleName;
         $schedule->memo = $request->memo;
         $schedule->createdBy = $id;
-        $candidate->candidateName = $request->candidates;
-        $candidate->scheduleId = Uuid::generate()->string;
         $schedule->save();
-        $candidate->save();
-
+        foreach($array as $data) {
+            $candidate = new Candidate();
+            $candidate->candidateName = $data;
+            $candidate->scheduleId = $scheduleId;
+            $candidate->save();
+            $candidate->attend()->create([
+                'userId' => $id,
+                'attendId' => 0,
+                'scheduleId' => $scheduleId
+            ]);
+        }
         return redirect('/');
     }
-
-    //記事詳細画面
+    //予定詳細画面
     public function show($id) {
         $schedule = Schedule::findOrFail($id);
-        return view('posts.show')->with('schedule', $schedule);
+        $user = Schedule::findOrFail($id)->user;
+        $candidates = Schedule::findOrFail($id)->candidates;
+        $attends = Schedule::findOrFail($id)->attends;
+        return view('posts.show')->with([
+            "schedule" => $schedule,
+            "user" => $user,
+            "candidates" => $candidates,
+            "attends" => $attends
+        ]);
     }
 }

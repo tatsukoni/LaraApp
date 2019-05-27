@@ -21,7 +21,15 @@ class Schedule extends Model
         //static::creating(function ($model) {
             //$model->{$model->getKeyName()} = Uuid::generate()->string;
         //});
-    public function  Candidates() {
-        return $this->hasMany('App\Schedule');
+    public function candidates() {
+        return $this->hasMany('App\Candidate', 'scheduleId', 'scheduleId');
+    }
+
+    public function attends() {
+        return $this->hasMany('App\Attend', 'scheduleId', 'scheduleId');
+    }
+
+    public function user() {
+        return $this->belongsTo('App\User', 'createdBy');
     }
 }

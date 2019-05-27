@@ -27,3 +27,12 @@ Route::post('posts', 'ScheduleController@store');
 
 //予定の詳細表示
 Route::get('/schedules/{id}', 'ScheduleController@show');
+
+//予定の編集
+Route::get('/edit/{id}', 'EditController@edit');
+
+//編集した予定の更新
+Route::patch('edit/{id}', 'EditController@update');
+
+//予定の削除
+Route::delete('delete/{id}', 'EditController@destroy');

@@ -5,7 +5,7 @@
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-  <form method="post" action="{{ url('/posts') }}">
+  <form method="post" action="{{ url('/create') }}">
     {{ csrf_field() }}
     <p>予定名</p>
     <p><input type="text" name="scheduleName" placeholder="予定名"></p>

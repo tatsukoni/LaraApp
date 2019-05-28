@@ -23,22 +23,22 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('create', 'ScheduleController@create');
 
-Route::post('posts', 'ScheduleController@store');
+Route::post('create', 'ScheduleController@store');
 
 //予定の詳細表示
-Route::get('/schedules/{id}', 'ScheduleController@show');
+Route::get('/schedules/{scheduleId}', 'ScheduleController@show');
 
 //予定の編集
-Route::get('/edit/{id}', 'EditController@edit');
+Route::get('/edit/{scheduleId}', 'EditController@edit');
 
 //編集した予定の更新
-Route::patch('edit/{id}', 'EditController@update');
+Route::patch('edit/{scheduleId}', 'EditController@update');
 
 //予定の削除
-Route::delete('delete/{id}', 'EditController@destroy');
+Route::delete('delete/{scheduleId}', 'EditController@destroy');
 
 //出欠情報の編集
-Route::get('/attend/{id}/user/{user}', 'AttendController@attend');
+Route::get('/attend/{scheduleId}/user/{userId}', 'AttendController@attend');
 
 //出欠情報の更新
-Route::patch('attend/{id}/user/{user}', 'AttendController@update');
+Route::patch('attend/{scheduleId}/user/{userId}', 'AttendController@update');

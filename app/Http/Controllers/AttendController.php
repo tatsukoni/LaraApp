@@ -19,11 +19,13 @@ class AttendController extends Controller
     }
 
     //出欠の編集画面
-    public function attend($id, $user) {
-        $schedule = Schedule::findOrFail($id);
-        $user = User::findOrFail($user);
-        $comment = Schedule::findOrFail($id)->comment;
-        $attends = Schedule::findOrFail($id)->attends;
+    public function attend($scheduleId, $userId) {
+        $schedule = Schedule::findOrFail($scheduleId);
+        $user = User::findOrFail($userId);
+        $comment = Schedule::findOrFail($scheduleId)->comment;
+        $attends = Schedule::findOrFail($scheduleId)->attends;
+        //$attendArray：候補日と出欠情報を紐づける連想配列
+        //key：候補日　value：出欠
         $attendArray = [];
         foreach($attends as $attend) {
             $candidateId = $attend->candidateId;
@@ -39,10 +41,12 @@ class AttendController extends Controller
     }
 
     //出欠の更新
-    public function update(Request $request, $id, $user) {
-        $attends = Attend::where('scheduleId', $id)->where('userId', $user)->get();
-        $comment = Comment::where('scheduleId', $id)->where('userId', $user)->first();
+    public function update(Request $request, $scheduleId, $userId) {
+        //コメントの更新
+        $comment = Comment::where('scheduleId', $scheduleId)->where('userId', $userId)->first();
         $comment->update(['comment' => $request->comment]);
+        //出欠情報の更新
+        $attends = Attend::where('scheduleId', $scheduleId)->where('userId', $userId)->get();
         $count = 1;
         foreach($attends as $attend) {
             $attend->update(['attend' => $request->$count]);

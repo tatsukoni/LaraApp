@@ -17,11 +17,11 @@
       @php
         $count = 1;
       @endphp
-      @foreach ($attendArray as $key => $value)
+      @foreach ($attendArray as $candidateName => $attendValue)
         <tr>
-          <td>{{ $key }}</td>
+          <td>{{ $candidateName }}</td>
           <td>
-            <p>現在のステータス：{{ $value }}</p>
+            <p>現在のステータス：{{ $attendValue }}</p>
             <select name="{{ $count }}">
               <option value="欠席">欠席</option>
               <option value="出席">出席</option>

@@ -34,10 +34,10 @@
         <th>予定</th>
         <th>{{ $loginUser->name }}</th>
       </tr>
-      @foreach ($attendArray as $key => $value)
+      @foreach ($attendArray as $candidateName => $attendValue)
       <tr>
-        <td>{{ $key }}</td>
-        <td>{{ $value }}</td>
+        <td>{{ $candidateName }}</td>
+        <td>{{ $attendValue }}</td>
       </tr>
       @endforeach
       <tr>
@@ -47,4 +47,5 @@
     </table>
     <p><a href="/attend/{{ $schedule->scheduleId }}/user/{{ $loginUser->id }}">出欠を更新する</a></p>
   </div>
+  <p><a href="{{ url('/') }}">一覧に戻る</a></p>
 </html>

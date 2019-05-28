@@ -17,9 +17,9 @@ class EditController extends Controller
     }
 
     //予定編集画面
-    public function edit($id) {
-        $schedule = Schedule::findOrFail($id);
-        $candidates = Schedule::findOrFail($id)->candidates;
+    public function edit($scheduleId) {
+        $schedule = Schedule::findOrFail($scheduleId);
+        $candidates = Schedule::findOrFail($scheduleId)->candidates;
         return view('posts.edit')->with([
             "schedule" => $schedule,
             "candidates" => $candidates
@@ -27,25 +27,28 @@ class EditController extends Controller
     }
 
     //予定の更新
-    public function update(Request $request, $id) {
-        $schedule = Schedule::findOrFail($id);
+    public function update(Request $request, $scheduleId) {
         $userId = Auth::id();
-        $array = explode("\r\n", $request->candidates);
-        $schedule->scheduleId = $id;
+        $candidateArray = explode("\r\n", $request->candidates);
+        //スケジュールテーブルを更新
+        $schedule = Schedule::findOrFail($scheduleId);
+        $schedule->scheduleId = $scheduleId;
         $schedule->scheduleName = $request->scheduleName;
         $schedule->memo = $request->memo;
         $schedule->createdBy = $userId;
         $schedule->save();
-        if ($array[0] !== "") {
-            foreach($array as $data) {
+        //複数の候補日をcandidatesテーブルに保存
+        if ($candidateArray[0] !== "") {
+            foreach($candidateArray as $candidateStr) {
                 $candidate = new Candidate();
-                $candidate->candidateName = $data;
-                $candidate->scheduleId = $id;
+                $candidate->candidateName = $candidateStr;
+                $candidate->scheduleId = $scheduleId;
                 $candidate->save();
+                //候補日ごとの出欠情報を登録。attendカラムには初期値として欠席を代入
                 $candidate->attend()->create([
                     'userId' => $userId,
                     'attend' => '欠席',
-                    'scheduleId' => $id
+                    'scheduleId' => $scheduleId
                 ]);
             }
             return redirect('/');
@@ -55,12 +58,18 @@ class EditController extends Controller
     }
 
     //予定の削除
-    public function destroy($id) {
-        $schedule = Schedule::findOrFail($id);
-        $candidates = Schedule::findOrFail($id)->candidates;
+    public function destroy($scheduleId) {
+        $schedule = Schedule::findOrFail($scheduleId);
+        $candidates = Schedule::findOrFail($scheduleId)->candidates;
+        $attends = Schedule::findOrFail($scheduleId)->attends;
+        $comment = Schedule::findOrFail($scheduleId)->comment;
         $schedule->delete();
+        $comment->delete();
         foreach($candidates as $candidate) {
             $candidate->delete();
+        }
+        foreach($attends as $attend) {
+            $attend->delete();
         }
         return redirect('/');
     }

@@ -9,7 +9,7 @@ class Attend extends Model
     //
     protected $fillable = [
         'userId',
-        'attendId',
+        'attend',
         'scheduleId'
     ];
 

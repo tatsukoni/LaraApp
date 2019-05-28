@@ -44,7 +44,7 @@ class EditController extends Controller
                 $candidate->save();
                 $candidate->attend()->create([
                     'userId' => $userId,
-                    'attendId' => 0,
+                    'attend' => '欠席',
                     'scheduleId' => $id
                 ]);
             }

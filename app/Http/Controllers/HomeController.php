@@ -24,7 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $schedules = Schedule::all();
+        $schedules = Schedule::orderBy('created_at', 'desc')->get();
         return view('home')->with('schedules', $schedules);
     }
 }

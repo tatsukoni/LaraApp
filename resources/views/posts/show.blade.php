@@ -22,7 +22,7 @@
       </tr>
       <tr>
         <td>作成者</td>
-        <td>{{ $user->name }}</td>
+        <td>{{ $makeUser->name }}</td>
       </tr>
     </table>
     <p><a href="{{ url('/edit', $schedule->scheduleId) }}">この予定を編集する</a></p>
@@ -32,22 +32,19 @@
     <table border="1">
       <tr>
         <th>予定</th>
-        <th>{{ $user->name }}</th>
+        <th>{{ $loginUser->name }}</th>
       </tr>
+      @foreach ($attendArray as $key => $value)
       <tr>
-        <td>ダミー</td>
-        <td>ダミー</td>
+        <td>{{ $key }}</td>
+        <td>{{ $value }}</td>
+      </tr>
+      @endforeach
+      <tr>
+        <td>コメント</td>
+        <td>{{ $comment->comment }}</td>
       </tr>
     </table>
-    <div>
-      @foreach ($candidates as $candidate)
-        <p>{{ $candidate->candidateName }}</p>
-      @endforeach
-    </div>
-    <div>
-      @foreach ($attends as $attend)
-        <p>{{ $attend->attendId }}</p>
-      @endforeach
-    </div>
+    <p><a href="/attend/{{ $schedule->scheduleId }}/user/{{ $loginUser->id }}">出欠を更新する</a></p>
   </div>
 </html>

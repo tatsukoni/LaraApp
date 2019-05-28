@@ -36,3 +36,9 @@ Route::patch('edit/{id}', 'EditController@update');
 
 //予定の削除
 Route::delete('delete/{id}', 'EditController@destroy');
+
+//出欠情報の編集
+Route::get('/attend/{id}/user/{user}', 'AttendController@attend');
+
+//出欠情報の更新
+Route::patch('attend/{id}/user/{user}', 'AttendController@update');

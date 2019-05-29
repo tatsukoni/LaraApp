@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\EditRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Schedule;
 use App\Candidate;
@@ -27,7 +27,7 @@ class EditController extends Controller
     }
 
     //予定の更新
-    public function update(Request $request, $scheduleId) {
+    public function update(EditRequest $request, $scheduleId) {
         $userId = Auth::id();
         $candidateArray = explode("\r\n", $request->candidates);
         //スケジュールテーブルを更新

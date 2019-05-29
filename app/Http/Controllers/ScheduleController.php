@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\ScheduleRequest;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Schedule;
@@ -25,7 +25,7 @@ class ScheduleController extends Controller
     }
 
     //予定保存
-    public function store(Request $request) {
+    public function store(ScheduleRequest $request) {
         $userId = Auth::id();
         $scheduleId = Uuid::generate()->string;
         $candidateArray = explode("\r\n", $request->candidates);

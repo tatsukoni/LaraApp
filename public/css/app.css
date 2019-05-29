@@ -16,3 +16,7 @@
 textarea {
   height: 120px;
 }
+
+.error {
+  color: red;
+}

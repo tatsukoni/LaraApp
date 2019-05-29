@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\AttendRequest;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Schedule;
@@ -41,10 +41,12 @@ class AttendController extends Controller
     }
 
     //出欠の更新
-    public function update(Request $request, $scheduleId, $userId) {
+    public function update(AttendRequest $request, $scheduleId, $userId) {
         //コメントの更新
-        $comment = Comment::where('scheduleId', $scheduleId)->where('userId', $userId)->first();
-        $comment->update(['comment' => $request->comment]);
+        if (isset($request->comment)) {
+            $comment = Comment::where('scheduleId', $scheduleId)->where('userId', $userId)->first();
+            $comment->update(['comment' => $request->comment]);
+        }
         //出欠情報の更新
         $attends = Attend::where('scheduleId', $scheduleId)->where('userId', $userId)->get();
         $count = 1;

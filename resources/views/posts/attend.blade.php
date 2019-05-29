@@ -35,7 +35,12 @@
       @endforeach
       <tr>
         <td>コメント</td>
-        <td><textarea name="comment">{{ $comment->comment }}</textarea></td>
+        <td>
+          <textarea name="comment">{{ $comment->comment }}</textarea>
+          @if ($errors->has('comment'))
+          <span class="error">{{ $errors->first('comment') }}</span>
+          @endif
+        </td>
       </tr>
     </table>
     <p><input type="submit" value="出欠を更新する"></p>

@@ -25,14 +25,16 @@
         <td>{{ $makeUser->name }}</td>
       </tr>
     </table>
+    @if ($makeUser->id == $loginUser->id)
     <p><a href="{{ url('/edit', $schedule->scheduleId) }}">この予定を編集する</a></p>
+    @endif
   </div>
   <div>
     <h1>出欠表</h1>
     <table border="1">
       <tr>
         <th>予定</th>
-        <th>{{ $loginUser->name }}</th>
+        <th>{{ $makeUser->name }}</th>
       </tr>
       @foreach ($attendArray as $candidateName => $attendValue)
       <tr>
@@ -45,7 +47,9 @@
         <td>{{ $comment->comment }}</td>
       </tr>
     </table>
-    <p><a href="/attend/{{ $schedule->scheduleId }}/user/{{ $loginUser->id }}">出欠を更新する</a></p>
+    @if ($makeUser->id == $loginUser->id)
+    <p><a href="/attend/{{ $schedule->scheduleId }}/user/{{ $makeUser->id }}">出欠を更新する</a></p>
+    @endif
   </div>
   <p><a href="{{ url('/') }}">一覧に戻る</a></p>
 </html>

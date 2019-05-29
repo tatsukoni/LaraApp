@@ -20,4 +20,8 @@ class Attend extends Model
     public function candidate() {
         return $this->hasOne('App\Candidate', 'candidateId', 'candidateId');
     }
+
+    public function user() {
+        return $this->belongsTo('App\User', 'userId');
+    }
 }

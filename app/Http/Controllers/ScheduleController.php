@@ -66,7 +66,7 @@ class ScheduleController extends Controller
         $makeUser = Schedule::findOrFail($scheduleId)->user;
         $loginUser = User::findOrFail($userId);
         $comment = Schedule::findOrFail($scheduleId)->comment;
-        $attends = Schedule::findOrFail($scheduleId)->attends;
+        $attends = Attend::where('scheduleId', $scheduleId)->where('userId', $makeUser->id)->get();
         //$attendArray：候補日と出欠情報を紐づける連想配列
         //key：候補日　value：出欠
         $attendArray = [];

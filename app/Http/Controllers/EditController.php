@@ -51,9 +51,13 @@ class EditController extends Controller
                     'scheduleId' => $scheduleId
                 ]);
             }
-            return redirect('/');
+            return redirect()->action(
+                'ScheduleController@show', ['scheduleId' => $scheduleId]
+            );
         } else {
-            return redirect('/');
+            return redirect()->action(
+                'ScheduleController@show', ['scheduleId' => $scheduleId]
+            );
         }
     }
 

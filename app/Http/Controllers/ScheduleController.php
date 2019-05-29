@@ -55,7 +55,9 @@ class ScheduleController extends Controller
                 'scheduleId' => $scheduleId
             ]);
         }
-        return redirect('/');
+        return redirect()->action(
+            'ScheduleController@show', ['scheduleId' => $scheduleId]
+        );
     }
     //予定詳細画面
     public function show($scheduleId) {

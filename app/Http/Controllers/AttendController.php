@@ -54,6 +54,8 @@ class AttendController extends Controller
             $attend->update(['attend' => $request->$count]);
             $count++;
         }
-        return redirect('/');
+        return redirect()->action(
+            'ScheduleController@show', ['scheduleId' => $scheduleId]
+        );
     }
 }

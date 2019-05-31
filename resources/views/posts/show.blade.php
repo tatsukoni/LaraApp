@@ -26,7 +26,7 @@
       </tr>
     </table>
     @if ($makeUser->id == $loginUser->id)
-    <p><a href="{{ url('/edit', $schedule->scheduleId) }}">この予定を編集する</a></p>
+    <p><a href="/edit/{{ $schedule->scheduleId }}/user/{{ $makeUser->id }}">この予定を編集する</a></p>
     @endif
   </div>
   <div>

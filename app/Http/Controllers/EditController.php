@@ -17,13 +17,17 @@ class EditController extends Controller
     }
 
     //予定編集画面
-    public function edit($scheduleId) {
-        $schedule = Schedule::findOrFail($scheduleId);
-        $candidates = Schedule::findOrFail($scheduleId)->candidates;
-        return view('posts.edit')->with([
-            "schedule" => $schedule,
-            "candidates" => $candidates
-        ]);
+    public function edit($scheduleId, $userId) {
+        if ($userId == Auth::id()) {
+            $schedule = Schedule::findOrFail($scheduleId);
+            $candidates = Schedule::findOrFail($scheduleId)->candidates;
+            return view('posts.edit')->with([
+                "schedule" => $schedule,
+                "candidates" => $candidates
+            ]);
+        } else {
+            return redirect('/');
+        }
     }
 
     //予定の更新

@@ -20,24 +20,28 @@ class AttendController extends Controller
 
     //出欠の編集画面
     public function attend($scheduleId, $userId) {
-        $schedule = Schedule::findOrFail($scheduleId);
-        $user = User::findOrFail($userId);
-        $comment = Schedule::findOrFail($scheduleId)->comment;
-        $attends = Schedule::findOrFail($scheduleId)->attends;
-        //$attendArray：候補日と出欠情報を紐づける連想配列
-        //key：候補日　value：出欠
-        $attendArray = [];
-        foreach($attends as $attend) {
-            $candidateId = $attend->candidateId;
-            $candidate = Attend::findOrFail($candidateId)->candidate;
-            $attendArray[$candidate->candidateName] = $attend->attend;
+        if ($userId == Auth::id()) {
+            $schedule = Schedule::findOrFail($scheduleId);
+            $user = User::findOrFail($userId);
+            $comment = Schedule::findOrFail($scheduleId)->comment;
+            $attends = Schedule::findOrFail($scheduleId)->attends;
+            //$attendArray：候補日と出欠情報を紐づける連想配列
+            //key：候補日　value：出欠
+            $attendArray = [];
+            foreach($attends as $attend) {
+                $candidateId = $attend->candidateId;
+                $candidate = Attend::findOrFail($candidateId)->candidate;
+                $attendArray[$candidate->candidateName] = $attend->attend;
+            }   
+            return view('posts.attend')->with([
+                "schedule" => $schedule,
+                "user" => $user,
+                "comment" => $comment,
+                "attendArray" => $attendArray
+            ]);
+        } else {
+            return redirect('/');
         }
-        return view('posts.attend')->with([
-            "schedule" => $schedule,
-            "user" => $user,
-            "comment" => $comment,
-            "attendArray" => $attendArray
-        ]);
     }
 
     //出欠の更新

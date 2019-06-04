@@ -23,8 +23,8 @@ class AttendController extends Controller
         if ($userId == Auth::id()) {
             $schedule = Schedule::findOrFail($scheduleId);
             $user = User::findOrFail($userId);
-            $comment = Schedule::findOrFail($scheduleId)->comment;
-            $attends = Schedule::findOrFail($scheduleId)->attends;
+            $comment = Comment::where('scheduleId', $scheduleId)->where('userId', $userId)->first();
+            $attends = Attend::where('scheduleId', $scheduleId)->where('userId', $userId)->get();
             //$attendArray：候補日と出欠情報を紐づける連想配列
             //key：候補日　value：出欠
             $attendArray = [];
@@ -44,11 +44,28 @@ class AttendController extends Controller
         }
     }
 
+    //出欠の新規登録画面
+    public function attendCreate($scheduleId, $userId) {
+        if ($userId == Auth::id()) {
+            $schedule = Schedule::findOrFail($scheduleId);
+            $user = User::findOrFail($userId);
+            $candidates = $schedule->candidates;
+            return view('posts.attendCreate')->with([
+                "schedule" => $schedule,
+                "user" => $user,
+                "candidates" => $candidates
+            ]);
+        } else {
+            return redirect('/');
+        }
+    }
+
     //出欠の更新
-    public function update(AttendRequest $request, $scheduleId, $userId) {
+    public function update(AttendRequest $request, $scheduleId) {
+        $userId = Auth::id();
         //コメントの更新
         if (isset($request->comment)) {
-            $comment = Comment::where('scheduleId', $scheduleId)->where('userId', $userId)->first();
+            $comment = Comment::where('userId', $userId)->where('scheduleId', $scheduleId)->first();
             $comment->update(['comment' => $request->comment]);
         }
         //出欠情報の更新
@@ -56,6 +73,37 @@ class AttendController extends Controller
         $count = 1;
         foreach($attends as $attend) {
             $attend->update(['attend' => $request->$count]);
+            $count++;
+        }
+        return redirect()->action(
+            'ScheduleController@show', ['scheduleId' => $scheduleId]
+        );
+    }
+
+    //出欠の新規登録
+    public function create(AttendRequest $request, $scheduleId) {
+        $userId = Auth::id();
+        $schedule = Schedule::findOrFail($scheduleId);
+        $candidates = $schedule->candidates;
+        //コメントの登録
+        $comment = new Comment();
+        $comment->scheduleId = $scheduleId;
+        $comment->userId = $userId;
+        if (isset($request->comment)) {
+            $comment->comment = $request->comment;
+        } else {
+            $comment->comment = 'コメントはありません';
+        }
+        $comment->save();
+        //出欠情報の新規登録
+        $count = 1;
+        foreach($candidates as $candidate) {
+            $attend = new Attend();
+            $attend->candidateId = $candidate->candidateId;
+            $attend->userId = $userId;
+            $attend->attend = $request->$count;
+            $attend->scheduleId = $scheduleId;
+            $attend->save();
             $count++;
         }
         return redirect()->action(

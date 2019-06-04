@@ -63,24 +63,34 @@ class ScheduleController extends Controller
     public function show($scheduleId) {
         $userId = Auth::id();
         $schedule = Schedule::findOrFail($scheduleId);
-        $makeUser = Schedule::findOrFail($scheduleId)->user;
+        $makeUser = $schedule->user;
         $loginUser = User::findOrFail($userId);
-        $comment = Schedule::findOrFail($scheduleId)->comment;
-        $attends = Attend::where('scheduleId', $scheduleId)->where('userId', $makeUser->id)->get();
-        //$attendArray：候補日と出欠情報を紐づける連想配列
-        //key：候補日　value：出欠
-        $attendArray = [];
-        foreach($attends as $attend) {
-            $candidateId = $attend->candidateId;
-            $candidate = Attend::findOrFail($candidateId)->candidate;
-            $attendArray[$candidate->candidateName] = $attend->attend;
+        $comments = Comment::where('scheduleId', $scheduleId)->get();
+        $candidates = $schedule->candidates;
+        //$candidateArray[]
+        //key => 候補日日程, value => $attendArray[]
+        //$attendArray[]
+        //key => ユーザー名, value => ユーザーごとの出欠情報
+        $candidateArray = [];
+        foreach($candidates as $candidate) {
+            $attends = $candidate->attends;
+            $attendArray = [];
+            foreach($attends as $attend) {
+                $attendUser = User::findOrFail($attend->userId)->name;
+                $attendArray[$attendUser] = $attend->attend;
+            }
+            $candidateArray[$candidate->candidateName] = $attendArray;
         }
+        //ユーザーが出欠登録しているかを判断する変数$valueSet
+        $valueSet = 'false';
         return view('posts.show')->with([
             "schedule" => $schedule,
             "makeUser" => $makeUser,
             "loginUser" => $loginUser,
-            "comment" => $comment,
-            "attendArray" => $attendArray
+            "comments" => $comments,
+            "attends" => $attends,
+            "candidateArray" => $candidateArray,
+            "valueSet" => $valueSet
         ]);
     }
 }

@@ -34,5 +34,11 @@ Route::delete('delete/{scheduleId}', 'EditController@destroy');
 //出欠情報の編集
 Route::get('/attend/{scheduleId}/user/{userId}', 'AttendController@attend');
 
+//出欠情報の新規入力画面
+Route::get('attendCreate/{scheduleId}/user/{userId}', 'AttendController@attendCreate');
+
 //出欠情報の更新
-Route::patch('attend/{scheduleId}/user/{userId}', 'AttendController@update');
+Route::patch('attend/{scheduleId}', 'AttendController@update');
+
+//出欠情報の新規登録
+Route::post('attendCreate/{scheduleId}', 'AttendController@create');

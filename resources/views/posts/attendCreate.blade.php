@@ -5,10 +5,9 @@
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-  <h1>出欠情報の更新</h1>
-  <form method="post" action="/attend/{{ $schedule->scheduleId }}">
+  <h1>出欠情報の入力</h1>
+  <form method="post" action="/attendCreate/{{ $schedule->scheduleId }}">
     {{ csrf_field() }}
-    {{ method_field('patch') }}
     <table border="1">
       <tr>
         <th>予定</th>
@@ -17,11 +16,10 @@
       @php
         $count = 1;
       @endphp
-      @foreach ($attendArray as $candidateName => $attendValue)
+      @foreach ($candidates as $candidate)
         <tr>
-          <td>{{ $candidateName }}</td>
+          <td>{{ $candidate->candidateName }}</td>
           <td>
-            <p>現在のステータス：{{ $attendValue }}</p>
             <select name="{{ $count }}">
               <option value="欠席">欠席</option>
               <option value="出席">出席</option>
@@ -36,14 +34,15 @@
       <tr>
         <td>コメント</td>
         <td>
-          <textarea name="comment">{{ $comment->comment }}</textarea>
+          <textarea name="comment">コメントはありません</textarea>
           @if ($errors->has('comment'))
           <span class="error">{{ $errors->first('comment') }}</span>
           @endif
         </td>
       </tr>
     </table>
-    <p><input type="submit" value="出欠を更新する"></p>
+    <input type="hidden" name="count" value="{{ $count }}">
+    <p><input type="submit" value="出欠を入力する"></p>
   </form>
 </body>
 </html>

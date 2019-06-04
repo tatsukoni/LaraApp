@@ -12,7 +12,7 @@ class Candidate extends Model
         return $this->belongsTo('App\Schedule');
     }
 
-    public function attend() {
-        return $this->hasOne('App\Attend', 'candidateId', 'candidateId');
+    public function attends() {
+        return $this->hasMany('App\Attend', 'candidateId', 'candidateId');
     }
 }

@@ -29,8 +29,8 @@ class Schedule extends Model
         return $this->hasMany('App\Attend', 'scheduleId', 'scheduleId');
     }
 
-    public function comment() {
-        return $this->hasOne('App\Comment', 'scheduleId', 'scheduleId');
+    public function comments() {
+        return $this->hasMany('App\Comment', 'scheduleId', 'scheduleId');
     }
 
     public function user() {

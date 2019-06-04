@@ -3,8 +3,6 @@
   <title>予定詳細</title>
 </head>
 <body>
-
-</body>
   <div>
     <h1>予定詳細</h1>
     <table border="1">
@@ -34,22 +32,44 @@
     <table border="1">
       <tr>
         <th>予定</th>
-        <th>{{ $makeUser->name }}</th>
+        @foreach ($candidateArray as $candidateName => $attendArray)
+          @foreach ($attendArray as $userName => $attend)
+            <th>{{ $userName }}</th>
+          @endforeach
+          @php
+            break;
+          @endphp
+        @endforeach
       </tr>
-      @foreach ($attendArray as $candidateName => $attendValue)
-      <tr>
-        <td>{{ $candidateName }}</td>
-        <td>{{ $attendValue }}</td>
-      </tr>
+      @foreach ($candidateArray as $candidateName => $attendArray)
+        <tr>
+          <td>{{ $candidateName }}</td>
+          @foreach ($attendArray as $userName => $attend)
+            <td>{{ $attend }}</td>
+          @endforeach
+        </tr>
       @endforeach
       <tr>
         <td>コメント</td>
-        <td>{{ $comment->comment }}</td>
+        @foreach ($comments as $comment)
+          <td>{{ $comment->comment }}</td>
+        @endforeach
       </tr>
     </table>
-    @if ($makeUser->id == $loginUser->id)
-    <p><a href="/attend/{{ $schedule->scheduleId }}/user/{{ $makeUser->id }}">出欠を更新する</a></p>
+    @foreach ($attends as $attend)
+      @if ($loginUser->id == $attend->userId)
+        @php
+          $valueSet = 'true';
+          break;
+        @endphp
+      @endif
+    @endforeach
+    @if ($valueSet === 'true')
+      <p><a href="/attend/{{ $schedule->scheduleId }}/user/{{ $loginUser->id }}">出欠を更新する</a></p>
+    @else
+      <p><a href="/attendCreate/{{ $schedule->scheduleId }}/user/{{ $loginUser->id }}">出欠を入力する</a></p>
     @endif
   </div>
   <p><a href="{{ url('/') }}">一覧に戻る</a></p>
+</body>
 </html>

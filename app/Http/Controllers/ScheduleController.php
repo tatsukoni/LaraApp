@@ -49,7 +49,7 @@ class ScheduleController extends Controller
             $candidate->scheduleId = $scheduleId;
             $candidate->save();
             //候補日ごとの出欠情報を登録。attendカラムには初期値として欠席を代入
-            $candidate->attend()->create([
+            $candidate->attends()->create([
                 'userId' => $userId,
                 'attend' => '欠席',
                 'scheduleId' => $scheduleId

@@ -68,7 +68,7 @@ class ScheduleController extends Controller
         $comments = Comment::where('scheduleId', $scheduleId)->get();
         $candidates = $schedule->candidates;
         //$candidateArray[]
-        //key => 候補日日程, value => $attendArray[]
+        //key => 候補日の日程, value => $attendArray[]
         //$attendArray[]
         //key => ユーザー名, value => ユーザーごとの出欠情報
         $candidateArray = [];

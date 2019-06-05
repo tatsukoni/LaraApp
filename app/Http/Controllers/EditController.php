@@ -20,7 +20,7 @@ class EditController extends Controller
     public function edit($scheduleId, $userId) {
         if ($userId == Auth::id()) {
             $schedule = Schedule::findOrFail($scheduleId);
-            $candidates = Schedule::findOrFail($scheduleId)->candidates;
+            $candidates = $schedule->candidates;
             return view('posts.edit')->with([
                 "schedule" => $schedule,
                 "candidates" => $candidates
@@ -68,9 +68,9 @@ class EditController extends Controller
     //予定の削除
     public function destroy($scheduleId) {
         $schedule = Schedule::findOrFail($scheduleId);
-        $candidates = Schedule::findOrFail($scheduleId)->candidates;
-        $attends = Schedule::findOrFail($scheduleId)->attends;
-        $comment = Schedule::findOrFail($scheduleId)->comment;
+        $candidates = $schedule->candidates;
+        $attends = $schedule->attends;
+        $comment = $schedule->comment;
         $schedule->delete();
         $comment->delete();
         foreach($candidates as $candidate) {

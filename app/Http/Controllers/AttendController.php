@@ -30,7 +30,7 @@ class AttendController extends Controller
             $attendArray = [];
             foreach($attends as $attend) {
                 $candidateId = $attend->candidateId;
-                $candidate = Attend::findOrFail($candidateId)->candidate;
+                $candidate = $attend->candidate;
                 $attendArray[$candidate->candidateName] = $attend->attend;
             }   
             return view('posts.attend')->with([

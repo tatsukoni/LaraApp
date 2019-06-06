@@ -42,14 +42,14 @@ class EditController extends Controller
         $schedule->createdBy = $userId;
         $schedule->save();
         //複数の候補日をcandidatesテーブルに保存
-        if ($candidateArray[0] !== "") {
+        if (!empty($candidateArray[0])) {
             foreach($candidateArray as $candidateStr) {
                 $candidate = new Candidate();
                 $candidate->candidateName = $candidateStr;
                 $candidate->scheduleId = $scheduleId;
                 $candidate->save();
                 //候補日ごとの出欠情報を登録。attendカラムには初期値として欠席を代入
-                $candidate->attend()->create([
+                $candidate->attends()->create([
                     'userId' => $userId,
                     'attend' => '欠席',
                     'scheduleId' => $scheduleId
@@ -70,7 +70,7 @@ class EditController extends Controller
         $schedule = Schedule::findOrFail($scheduleId);
         $candidates = $schedule->candidates;
         $attends = $schedule->attends;
-        $comment = $schedule->comment;
+        $comment = $schedule->comments;
         $schedule->delete();
         $comment->delete();
         foreach($candidates as $candidate) {

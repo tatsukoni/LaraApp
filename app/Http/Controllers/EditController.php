@@ -70,9 +70,11 @@ class EditController extends Controller
         $schedule = Schedule::findOrFail($scheduleId);
         $candidates = $schedule->candidates;
         $attends = $schedule->attends;
-        $comment = $schedule->comments;
+        $comments = $schedule->comments;
         $schedule->delete();
-        $comment->delete();
+        foreach($comments as $comment) {
+            $comment->delete();
+        }
         foreach($candidates as $candidate) {
             $candidate->delete();
         }

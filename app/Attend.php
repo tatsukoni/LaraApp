@@ -19,8 +19,7 @@ class Attend extends Model
         'candidateId',
     ];
 
-    protected $primaryKey = ['candidateId', 'userId'];
-    //protected $primaryKey = 'userId';
+    protected $primaryKey = ['candidateId', 'userId', 'scheduleId'];
 
     public $timestamps = false;
 

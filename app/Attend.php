@@ -18,7 +18,7 @@ class Attend extends Model
     public $timestamps = false;
 
     public function candidate() {
-        return $this->hasOne('App\Candidate', 'candidateId', 'candidateId');
+        return $this->belongsTo('App\Candidate', 'candidateId', 'candidateId');
     }
 
     public function user() {

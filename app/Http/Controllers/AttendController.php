@@ -65,15 +65,18 @@ class AttendController extends Controller
         $userId = Auth::id();
         //コメントの更新
         if (isset($request->comment)) {
-            $comment = Comment::where('userId', $userId)->where('scheduleId', $scheduleId)->first();
-            $comment->update(['comment' => $request->comment]);
+            Comment::where('userId', $userId)
+                    ->where('scheduleId', $scheduleId)
+                    ->update(['comment' => $request->comment]);
         }
         //出欠情報の更新
-        $attends = Attend::where('scheduleId', $scheduleId)->where('userId', $userId)->get();
         $count = 1;
+        $attends = Attend::where('userId', $userId)
+                ->where('scheduleId', $scheduleId)
+                ->get();
         foreach($attends as $attend) {
             $attend->update(['attend' => $request->$count]);
-            $count++;
+            $count += 1;
         }
         return redirect()->action(
             'ScheduleController@show', ['scheduleId' => $scheduleId]

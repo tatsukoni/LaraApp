@@ -74,10 +74,13 @@ class AttendController extends Controller
         $attends = Attend::where('userId', $userId)
                 ->where('scheduleId', $scheduleId)
                 ->get();
+        //dd($attends);
         foreach($attends as $attend) {
+            dump($attend);
             $attend->update(['attend' => $request->$count]);
             $count += 1;
         }
+        //dd();
         return redirect()->action(
             'ScheduleController@show', ['scheduleId' => $scheduleId]
         );

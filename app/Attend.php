@@ -7,15 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class Attend extends Model
 {
     //
+    use CompositePrimaryKeyTrait;
+    /**
+     * 複合キー
+     * @var array
+     */
     protected $fillable = [
         'userId',
         'attend',
-        'scheduleId'
+        'scheduleId',
+        'candidateId',
     ];
 
-    protected $primaryKey = 'candidateId';
+    protected $primaryKey = ['candidateId', 'userId', 'scheduleId'];
 
     public $timestamps = false;
+
+    public $incrementing = false;
 
     public function candidate() {
         return $this->belongsTo('App\Candidate', 'candidateId', 'candidateId');

@@ -18,7 +18,7 @@ class CreateAttendsTable extends Migration
             $table->bigInteger('userId');
             $table->integer('attendId');
             $table->uuid('scheduleId');
-            $table->primary(['candidateId', 'userId']);
+            $table->primary(['candidateId', 'userId', 'scheduleId']);
         });
     }
 

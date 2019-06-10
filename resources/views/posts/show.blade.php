@@ -32,7 +32,7 @@
     <table border="1">
       <tr>
         <th>予定</th>
-        @foreach ($candidateArray as $candidateName => $attendArray)
+        @foreach ($candidates as $candidateName => $attendArray)
           @foreach ($attendArray as $userName => $attend)
             <th>{{ $userName }}</th>
           @endforeach
@@ -41,7 +41,7 @@
           @endphp
         @endforeach
       </tr>
-      @foreach ($candidateArray as $candidateName => $attendArray)
+      @foreach ($candidates as $candidateName => $attendArray)
         <tr>
           <td>{{ $candidateName }}</td>
           @foreach ($attendArray as $userName => $attend)

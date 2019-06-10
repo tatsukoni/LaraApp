@@ -12,4 +12,8 @@ class Comment extends Model
     ];
 
     protected $primaryKey = 'scheduleId';
+
+    public function schedule() {
+        return $this->belongsTo('App\Schedule', 'scheduleId', 'scheduleId');
+    }
 }

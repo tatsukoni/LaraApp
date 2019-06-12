@@ -23,7 +23,7 @@ Route::post('create', 'ScheduleController@store');
 Route::get('/schedules/{scheduleId}', 'ScheduleController@show');
 
 //予定の編集
-Route::get('/edit/{scheduleId}/user/{userId}', 'EditController@edit');
+Route::get('/edit/{scheduleId}', 'EditController@edit');
 
 //編集した予定の更新
 Route::patch('edit/{scheduleId}', 'EditController@update');

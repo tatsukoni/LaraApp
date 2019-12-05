@@ -8,6 +8,8 @@ use App\Schedule;
 use App\Candidate;
 use Webpatser\Uuid\Uuid;
 
+const ATTEND_VALUE = '欠席';
+
 class EditController extends Controller
 {
     //
@@ -17,23 +19,20 @@ class EditController extends Controller
     }
 
     //予定編集画面
-    public function edit($scheduleId, $userId) {
-        if ($userId == Auth::id()) {
-            $schedule = Schedule::findOrFail($scheduleId);
-            $candidates = $schedule->candidates;
-            return view('posts.edit')->with([
-                "schedule" => $schedule,
-                "candidates" => $candidates
-            ]);
-        } else {
-            return redirect('/');
-        }
+    public function edit($scheduleId) {
+        $schedule = Schedule::with(['candidates'])
+            ->findorFail($scheduleId);
+        return view('posts.edit')->with([
+            "schedule" => $schedule,
+            "candidates" => $schedule->candidates
+        ]);
     }
 
     //予定の更新
     public function update(EditRequest $request, $scheduleId) {
         $userId = Auth::id();
         $candidateArray = explode("\r\n", $request->candidates);
+
         //スケジュールテーブルを更新
         $schedule = Schedule::findOrFail($scheduleId);
         $schedule->scheduleId = $scheduleId;
@@ -41,6 +40,7 @@ class EditController extends Controller
         $schedule->memo = $request->memo;
         $schedule->createdBy = $userId;
         $schedule->save();
+
         //複数の候補日をcandidatesテーブルに保存
         if (!empty($candidateArray[0])) {
             foreach($candidateArray as $candidateStr) {
@@ -51,7 +51,7 @@ class EditController extends Controller
                 //候補日ごとの出欠情報を登録。attendカラムには初期値として欠席を代入
                 $candidate->attends()->create([
                     'userId' => $userId,
-                    'attend' => '欠席',
+                    'attend' => ATTEND_VALUE,
                     'scheduleId' => $scheduleId
                 ]);
             }
@@ -67,18 +67,21 @@ class EditController extends Controller
 
     //予定の削除
     public function destroy($scheduleId) {
-        $schedule = Schedule::findOrFail($scheduleId);
-        $candidates = $schedule->candidates;
-        $attends = $schedule->attends;
-        $comments = $schedule->comments;
+        $schedule = Schedule::with([
+            'candidates',
+            'attends',
+            'comments',
+        ])
+            ->findOrFail($scheduleId);
+        
         $schedule->delete();
-        foreach($comments as $comment) {
+        foreach($schedule->comments as $comment) {
             $comment->delete();
         }
-        foreach($candidates as $candidate) {
+        foreach($schedule->candidates as $candidate) {
             $candidate->delete();
         }
-        foreach($attends as $attend) {
+        foreach($schedule->attends as $attend) {
             $attend->delete();
         }
         return redirect('/');
